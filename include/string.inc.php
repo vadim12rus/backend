@@ -60,18 +60,37 @@
             echo 'Пусто!!!';
         }
     }
+    function isSpace($char)
+    {
+        $blank = ' '; 
+        if ($char == $blank)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     function RemoveExtrBlanks($str)
     {
+        $str = trim($str);
         $clearStr = '';
-        $blank = ' '; echo $str;
+
         for ($i = 0; $i < strlen($str); ++$i)
         {
-            if (!$str[$i] = $blank)
+            if (!isSpace($str[$i]))
             {
-                $clearStr =  $clearStr . $str[$i];
-                echo $str[2];
-            }echo $str[$i];
+                $clearStr .= $str[$i];
+                $space = false; 
+            }
+            else if (!$space)
+            {
+                 $clearStr .= $str[$i]; 
+                 $space = true;
+            }
+          
         }
-        echo $clearStr;
+        return $clearStr;
       
     }
