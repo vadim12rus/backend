@@ -41,16 +41,27 @@
         return $goodStr;
     }
 
-    function isSetStr($str)
+    function checkStr($str)
     {
         if (isset($str))
         { 
-            isEmptyStr($str);
+            if (empty($str))
+            {   
+                echo 'Пусто!!!';
+                $goodStr = false;
+            }
+            else
+            {
+                $goodStr = true;
+            }
+         
         }
         else
         {   
             echo 'Не передано STR!!!';
+            $goodStr = false;
         }
+        return $goodStr;
     }
 
     function isEmptyStr($str)
@@ -58,6 +69,11 @@
         if (empty($str))
         {   
             echo 'Пусто!!!';
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
     function isSpace($char)
@@ -91,6 +107,85 @@
             }
           
         }
-        return $clearStr;
+        return $clearStr;  
+    }
+
+    function numberOfStr($str)
+    {
+        $n = 0;
+        for ($i = 0; $i < strlen($str); ++$i)
+        {
+            if (is_numeric($str[$i]))
+            {
+                $n++;
+            }
+        }
+        return $n;
+    }
+    function countCase($register, $str)
+    {
+        $count = 0;
+        for ($i = 0; $i < strlen($str); ++$i)
+        {
+            if (!preg_match($register, $str[$i]))
+            {
+                $count++;
+            }
+        }
+        return $count;
+    }
+    function only($str)
+    {
+        $isNumeric = false;
+        $isString = false;
+        for ($i = 0; $i < strlen($str); ++$i)
+        {
+            if (is_numeric($str[$i]))
+            {
+                $isNumeric = true;
+            }
+            else if (is_string($str[$i]))
+            {
+                $isString = true;
+            }
+        }
+        return $isString && $isNumeric;
+        
+    }
+    function repetitiveSymbol($str)
+    {
+        $countRepetitiveChar = 0;
+        foreach (count_chars($str, 1) as $val) 
+        {
+            if ($val >= 2)
+            {
+                $countRepetitiveChar += $val;
+            }
+        }
+        return $countRepetitiveChar;
+    }
+    function passwordStrength($str)
+    {
+        $strength = 0;
+        $strength = $strength + 4 * strlen($str);
+        $strength = $strength + 4 * numberOfStr($str);
       
+        $contUpCase = countCase('/[^A-Z]+/', $str);
+        if ($contUpCase != 0)
+        {
+            $strength = $strength + 2 * (strlen($str) - $contUpCase);
+        }
+      
+        $contLowerCase = countCase('/[^a-z]+/', $str);
+        if ($contLowerCase != 0)
+        {
+            $strength = $strength + 2 * (strlen($str) - $contLowerCase);
+        }
+      
+        if (!only($str))
+        {
+            $strength = $strength - strlen($str);
+        }
+        $strength = $strength - repetitiveSymbol($str);
+        return $strength;
     }
