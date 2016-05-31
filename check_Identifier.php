@@ -1,14 +1,22 @@
 <?php
     require_once('include/string.inc.php');
-    isSetStr($_GET['str']);
-    $str = $_GET['str'];
-    if ((isValidString($str)))
+
+
+    if (checkStr($_GET['str']))
     {
-        echo $str;
+        $str = $_GET['str'];
+        if ((isValidString($str)))
+        {
+            echo $str;
+        }
+        else
+        {
+            echo "Есть недопустимые символы!!!";   
+        } 
     }
     else
     {
-        echo "Есть недопустимые символы!!!";   
-    } 
+        echo "Некорректный ввод!!!";
+    }
     
    
