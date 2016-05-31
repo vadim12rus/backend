@@ -27,41 +27,21 @@
         $FirstChar = substr($str, 0, 1);
         return $FirstChar;
     }
-
     function isValidString($str)
     {
-        if (!is_numeric(firstStrElements($str)))
-        {            
-            $goodStr = true;           
+        $validSymbol = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"; 
+        $isBadCharInStr = false;
+        for ($i = 0; ($i < strlen($str)) && !$isBadCharInStr ; $i++)
+        {       
+            $isBadCharInStr = !stristr($validSymbol, $str{$i});     
         }
-        else
-        {
-            $goodStr =  false;   
-        }
-        return $goodStr;
+        return !is_numeric(firstStrElements($str)) && !$isBadCharInStr;
     }
 
     function checkStr($str)
     {
-        if (isset($str))
-        { 
-            if (empty($str))
-            {   
-                echo 'Пусто!!!';
-                $goodStr = false;
-            }
-            else
-            {
-                $goodStr = true;
-            }
-         
-        }
-        else
-        {   
-            echo 'Не передано STR!!!';
-            $goodStr = false;
-        }
-        return $goodStr;
+        
+       return !empty($str);
     }
 
     function isEmptyStr($str)
@@ -122,7 +102,7 @@
         }
         return $n;
     }
-    function countCase($register, $str)
+    function countRegister($register, $str)
     {
         $count = 0;
         for ($i = 0; $i < strlen($str); ++$i)
@@ -134,7 +114,7 @@
         }
         return $count;
     }
-    function only($str)
+    function passwordConsistsOnlyOfLettersOrDigits($str)
     {
         $isNumeric = false;
         $isString = false;
@@ -168,24 +148,27 @@
     {
         $strength = 0;
         $strength = $strength + 4 * strlen($str);
+        echo '1)'.strlen($str).'<br>';
         $strength = $strength + 4 * numberOfStr($str);
-      
-        $contUpCase = countCase('/[^A-Z]+/', $str);
+        echo '2)'.numberOfStr($str).'<br>'; 
+        $contUpCase = countRegister('/[^A-Z]+/', $str);
         if ($contUpCase != 0)
         {
             $strength = $strength + 2 * (strlen($str) - $contUpCase);
         }
-      
-        $contLowerCase = countCase('/[^a-z]+/', $str);
+        echo "3)$contUpCase <br>";       
+        $contLowerCase = countRegister('/[^a-z]+/', $str);
         if ($contLowerCase != 0)
         {
             $strength = $strength + 2 * (strlen($str) - $contLowerCase);
         }
-      
-        if (!only($str))
+        echo "4)$contLowerCase <br>";         
+        if (!passwordConsistsOnlyOfLettersOrDigits($str))
         {
             $strength = $strength - strlen($str);
+            echo "5, 6)".strlen($str)."<br>";   
         }
         $strength = $strength - repetitiveSymbol($str);
+        echo "7)Вычитаем ".repetitiveSymbol($str)."<br>"; 
         return $strength;
     }
